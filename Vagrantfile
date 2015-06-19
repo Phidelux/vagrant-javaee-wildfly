@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :unix_reboot
   config.vm.provision "shell", path: "vagrant/openJdk.sh"
   config.vm.provision "shell", path: "vagrant/postgreSql.sh"
-  # config.vm.provision "shell", path: "vagrant/wildcat.sh"
+  config.vm.provision "shell", path: "vagrant/wildcat.sh"
   config.vm.provision "shell", path: "vagrant/boxCleanup.sh"
   config.vm.provision "shell", path: "vagrant/conclusion.sh"  
 end
