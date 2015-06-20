@@ -7,11 +7,13 @@ In order to use this Vagrant configuration, you should install [Vagrant](https:/
 
 ## Dependencies
 
-Before you can start using this project, you have to install the *vagrant-provision-reboot* plugin. Therfore check out the corresponding git repository:
+Before you can start using this project, you have to install the *vagrant-reload* plugin:
 
-    git clone https://github.com/exratione/vagrant-provision-reboot.git
+    $ vagrant plugin install vagrant-reload
 
-And copy *vagrant-provision-reboot-plugin.rb* to the *vagrant* folder of this project. This will allow vagrant to reboot the virtual machine during the setup process in order to load newly installed kernels.
+In order to check if it was installed succesfull or if it is already installed, you can execute the following command:
+
+    $ vagrant plugin list
 
 ## Usage
 

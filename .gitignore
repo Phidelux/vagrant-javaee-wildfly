@@ -1,5 +1,2 @@
 # Ignore vagrant files.
 .vagrant
-
-# Ignore vagrant reboot plugin.
-vagrant/vagrant-provision-reboot-plugin.rb

@@ -4,9 +4,6 @@
 # Vagrantfile API/syntax version.
 VAGRANTFILE_API_VERSION = "2"
 
-# Require the reboot plugin.
-require './vagrant/vagrant-provision-reboot-plugin'
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # General virtualbox settings.
   config.vm.provider :virtualbox do |vb|
@@ -41,7 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Execute server setup scripts
   config.vm.provision "shell", path: "vagrant/boxUpdate.sh"
-  config.vm.provision :unix_reboot
+  config.vm.provision :reload 
   config.vm.provision "shell", path: "vagrant/openJdk.sh"
   config.vm.provision "shell", path: "vagrant/postgreSql.sh"
   config.vm.provision "shell", path: "vagrant/wildfly.sh"
