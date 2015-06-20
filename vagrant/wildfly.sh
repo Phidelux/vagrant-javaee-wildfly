@@ -51,13 +51,13 @@ Group=$WILDFLY_SYSTEM_USER
 ExecStart=$WILDFLY_DIR/bin/standalone.sh
  
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/${WILDFLY_SERVICE}.service
+WantedBy=multi-user.target" > $WILDFLY_SERVICE_PATH
 
 # ... and save the wildfly configuration path.
 WILDFLY_SERVICE_CONF=/etc/default/$WILDFLY_SERVICE
 
 # Set the proper access rights for the service configuration.
-chmod 755 /etc/systemd/${WILDFLY_SERVICE}.service
+chmod 755 $WILDFLY_SERVICE_PATH
  
 # Set environment variables for wildfly.
 if [ ! -z "$WILDFLY_SERVICE_CONF" ]; then
