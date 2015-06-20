@@ -7,7 +7,7 @@ apt-get -y update
 apt-get -y dist-upgrade
 
 # Install some basic tools needed for debugging and administration.
-apt-get -y install git-core build-essential openssl libssl-dev curl htop links unzip vim
+apt-get -y install git-core build-essential openssl libssl-dev curl htop links bsdtar unzip vim
 
 # Rebuild dkms for all installed kernel versions.
 ls /var/lib/initramfs-tools | xargs -n1 /usr/lib/dkms/dkms_autoinstaller start

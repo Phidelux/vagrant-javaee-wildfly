@@ -24,10 +24,10 @@ rm -rf "/var/run/$WILDFLY_SERVICE/"
 rm -f "/etc/init.d/$WILDFLY_SERVICE"
 
 # Create a new directory for wildfly, ...
-mkdir $WILDFLY_FULL_DIR
+mkdir -p $WILDFLY_FULL_DIR
 
 # ... extract the downloaded archive into the target directory ...
-tar -xzf $WILDFLY_ARCHIVE_NAME -C $INSTALL_DIR
+bsdtar -xzf $WILDFLY_ARCHIVE --cd $WILDFLY_INSTALL_DIR
 
 # ... and create a symbolic link to the installation directory.
 ln -s $WILDFLY_FULL_DIR/ $WILDFLY_DIR
@@ -39,17 +39,25 @@ useradd -s /sbin/nologin $WILDFLY_SYSTEM_USER
 chown -R $WILDFLY_SYSTEM_USER:$WILDFLY_SYSTEM_USER $WILDFLY_DIR
 chown -R $WILDFLY_SYSTEM_USER:$WILDFLY_SYSTEM_USER $WILDFLY_DIR/
 
-# Copy the wildfly service init script to its proper location, ...  
-cp $WILDFLY_DIR/bin/init.d/wildfly-init-debian.sh /etc/init.d/$WILDFLY_SERVICE
-
-# ... set the wildfly user and service name within the configuration ... 
-sed -i -e 's,NAME='$WILDFLY_SYSTEM_USER',NAME='$WILDFLY_SERVICE',g' /etc/init.d/$WILDFLY_SERVICE
+# Ccreate a wildfly service script ...  
+echo "[Unit]
+Description=WildFly application server
+After=network.target
+ 
+[Service]
+Type=simple
+User=$WILDFLY_SYSTEM_USER
+Group=$WILDFLY_SYSTEM_USER
+ExecStart=$WILDFLY_DIR/bin/standalone.sh
+ 
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/${WILDFLY_SERVICE}.service
 
 # ... and save the wildfly configuration path.
 WILDFLY_SERVICE_CONF=/etc/default/$WILDFLY_SERVICE
 
 # Set the proper access rights for the service configuration.
-chmod 755 /etc/init.d/$WILDFLY_SERVICE
+chmod 755 /etc/systemd/${WILDFLY_SERVICE}.service
  
 # Set environment variables for wildfly.
 if [ ! -z "$WILDFLY_SERVICE_CONF" ]; then
@@ -67,4 +75,5 @@ sed -i -e 's,<socket-binding name="http" port="${jboss.http.port:8080}"/>,<socke
 sed -i -e 's,<socket-binding name="https" port="${jboss.https.port:8443}"/>,<socket-binding name="https" port="${jboss.https.port:28443}"/>,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
 sed -i -e 's,<socket-binding name="osgi-http" interface="management" port="8090"/>,<socket-binding name="osgi-http" interface="management" port="28090"/>,g' $WILDFLY_DIR/standalone/configuration/standalone.xml
                      
-service $WILDFLY_SERVICE start
+systemctl enable $WILDFLY_SERVICE
+systemctl restart $WILDFLY_SERVICE
